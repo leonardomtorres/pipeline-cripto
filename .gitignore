@@ -1,0 +1,36 @@
+# Segredos e credenciais — NUNCA commitar
+.env
+credentials/
+*.json
+!dbt/**/*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+
+# Airflow
+orchestration/logs/
+orchestration/plugins/
+airflow.db
+airflow.cfg
+webserver_config.py
+
+# Dados locais
+data/
+*.parquet
+*.csv
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
