@@ -1,0 +1,25 @@
+# docker compose run --rm ingestion   -> roda a ingestao
+# docker compose run --rm dbt run      -> roda os modelos
+# docker compose run --rm dbt test     -> roda os testes
+
+services:
+  ingestion:
+    build: ./ingestion
+    env_file: .env
+    volumes:
+      - ./credentials:/app/credentials:ro
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /app/credentials/gcp-key.json
+
+  dbt:
+    build: ./dbt
+    env_file: .env
+    working_dir: /dbt
+    volumes:
+      - ./dbt:/dbt
+      - ./credentials:/dbt/credentials:ro
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /dbt/credentials/gcp-key.json
+      DBT_PROFILES_DIR: /dbt
+    entrypoint: ["dbt"]
+    command: ["--version"]
