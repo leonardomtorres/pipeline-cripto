@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_coingecko__market_data
+    description: "Dados do CoinGecko limpos e tipados."
+    columns:
+      - name: coin_id
+        tests:
+          - not_null
+      - name: preco
+        tests:
+          - not_null
+      - name: extraido_em
+        tests:
+          - not_null
