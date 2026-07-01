@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-ingestion:
+    name: Lint da ingestão (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar dependências
+        run: pip install -r ingestion/requirements.txt ruff
+      - name: Ruff (lint)
+        run: ruff check ingestion/
+
+  # Fase 5: rodar `dbt build` contra um dataset de CI usando segredos do GitHub.
+  # Esqueleto deixado pronto; descomentar quando os segredos estiverem configurados.
+  # dbt-test:
+  #   name: dbt build (BigQuery)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.11"
+  #     - run: pip install dbt-bigquery==1.8.2
+  #     - run: dbt build
+  #       working-directory: dbt
+  #       env:
+  #         GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  #         GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY_PATH }}
