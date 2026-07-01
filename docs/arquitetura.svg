@@ -1,0 +1,52 @@
+<svg viewBox="0 0 860 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <title>Arquitetura do pipeline de criptomoedas</title>
+  <desc>Fluxo: CoinGecko para Python, para GCS camada raw, para BigQuery com camadas staging intermediate e marts transformadas por dbt, para Looker Studio. Airflow orquestra e Docker isola o ambiente.</desc>
+
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#888780"/>
+    </marker>
+  </defs>
+
+  <text x="430" y="30" text-anchor="middle" font-size="15" font-weight="700" fill="#2C2C2A">Pipeline de dados de criptomoedas (batch / ELT)</text>
+
+  <rect x="20" y="70" width="120" height="64" rx="9" fill="none" stroke="#D3D1C7"/>
+  <text x="80" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#2C2C2A">CoinGecko</text>
+  <text x="80" y="116" text-anchor="middle" font-size="11" fill="#888780">API (fonte)</text>
+
+  <rect x="180" y="70" width="120" height="64" rx="9" fill="none" stroke="#D3D1C7"/>
+  <text x="240" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#2C2C2A">Python</text>
+  <text x="240" y="116" text-anchor="middle" font-size="11" fill="#888780">ingestão (E)</text>
+
+  <rect x="340" y="70" width="120" height="64" rx="9" fill="none" stroke="#D3D1C7"/>
+  <text x="400" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#2C2C2A">GCS</text>
+  <text x="400" y="116" text-anchor="middle" font-size="11" fill="#888780">raw / bronze (L)</text>
+
+  <rect x="720" y="70" width="120" height="64" rx="9" fill="none" stroke="#D3D1C7"/>
+  <text x="780" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#2C2C2A">Looker Studio</text>
+  <text x="780" y="116" text-anchor="middle" font-size="11" fill="#888780">dashboard</text>
+
+  <rect x="500" y="70" width="160" height="200" rx="9" fill="none" stroke="#D3D1C7"/>
+  <text x="580" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#2C2C2A">BigQuery</text>
+  <text x="580" y="108" text-anchor="middle" font-size="10" fill="#7F77DD">transformado por dbt (T)</text>
+  <rect x="516" y="120" width="128" height="34" rx="6" fill="none" stroke="#7F77DD"/>
+  <text x="580" y="141" text-anchor="middle" font-size="11" fill="#5F5E5A">staging (limpeza)</text>
+  <rect x="516" y="162" width="128" height="34" rx="6" fill="none" stroke="#7F77DD"/>
+  <text x="580" y="183" text-anchor="middle" font-size="11" fill="#5F5E5A">intermediate (cálculos)</text>
+  <rect x="516" y="204" width="128" height="34" rx="6" fill="none" stroke="#7F77DD"/>
+  <text x="580" y="225" text-anchor="middle" font-size="11" fill="#5F5E5A">marts (pronto p/ uso)</text>
+
+  <g stroke="#888780" stroke-width="1.5" marker-end="url(#arr)">
+    <line x1="140" y1="102" x2="176" y2="102"/>
+    <line x1="300" y1="102" x2="336" y2="102"/>
+    <line x1="460" y1="102" x2="496" y2="102"/>
+    <line x1="660" y1="155" x2="716" y2="120"/>
+  </g>
+
+  <rect x="20" y="300" width="640" height="40" rx="9" fill="none" stroke="#7F77DD" stroke-dasharray="5 4"/>
+  <text x="340" y="325" text-anchor="middle" font-size="12" fill="#7F77DD">Airflow — orquestra: roda na ordem, todo dia, com retry</text>
+
+  <text x="690" y="325" font-size="12" fill="#7F77DD">Docker = ambiente isolado</text>
+
+  <text x="20" y="372" font-size="11" fill="#888780">Fluxo do dado: caixa cinza  ·  roxo = camada de operação (não toca o dado)  ·  E-L-T = Extract, Load, Transform</text>
+</svg>
