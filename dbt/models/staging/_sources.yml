@@ -1,9 +1,13 @@
 version: 2
 
+# Declara as tabelas cruas (carregadas do GCS) como fontes do dbt.
+# Assim o lineage comeca na origem e o source() aponta pra ca.
 sources:
   - name: raw
-    database: "{{ env_var('GCP_PROJECT_ID') }}"
-    schema: "{{ env_var('BQ_DATASET_RAW', 'cripto_raw') }}"
+    database: project-7a99ed4c-9c50-46b3-abd
+    schema: cripto_raw
     tables:
       - name: coingecko_market_data
-        description: "Snapshot diario de mercado das criptos (camada raw)."
+        description: "Snapshot atual de mercado das criptos."
+      - name: coingecko_price_history
+        description: "Historico diario de precos (1 ano)."

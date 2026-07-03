@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: fct_precos_diarios
+    description: "Preco diario por moeda, com retorno e media movel de 7 dias."
+    columns:
+      - name: coin_id
+        tests:
+          - not_null
+      - name: data
+        tests:
+          - not_null
+
+  - name: fct_volatilidade
+    description: "Resumo de risco/retorno por moeda no periodo."
+    columns:
+      - name: coin_id
+        tests:
+          - not_null
+          - unique

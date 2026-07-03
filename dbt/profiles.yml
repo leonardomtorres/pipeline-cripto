@@ -1,13 +1,14 @@
+# Conexao do dbt com o BigQuery.
+# method: oauth -> usa o ADC (gcloud auth application-default login), sem chave.
 pipeline_cripto:
   target: dev
   outputs:
     dev:
       type: bigquery
-      method: service-account
-      project: "{{ env_var('GCP_PROJECT_ID') }}"
-      dataset: "{{ env_var('BQ_DATASET_ANALYTICS', 'cripto_analytics') }}"
-      location: "{{ env_var('GCP_LOCATION', 'southamerica-east1') }}"
-      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
+      method: oauth
+      project: project-7a99ed4c-9c50-46b3-abd
+      dataset: cripto_analytics
+      location: southamerica-east1
       threads: 4
       timeout_seconds: 300
       priority: interactive
