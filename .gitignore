@@ -35,3 +35,6 @@ data/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Anotacoes pessoais (nao vao pro repo publico)
+ANOTACOES.md
