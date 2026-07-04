@@ -14,7 +14,7 @@ de engenharia de dados.
 
 Construir um pipeline de dados de ponta a ponta como rodaria de verdade num time:
 pegar um dado externo, guardar de forma confiável, transformar com qualidade e
-entregar pronto pra análise — tudo automatizado e reproduzível.
+entregar pronto pra análise, tudo automatizado e reproduzível.
 
 Usei criptomoedas porque é um assunto que curto e que gera dado de verdade: série
 temporal, preços que variam e métricas de negócio (retorno diário, volatilidade)
@@ -49,11 +49,11 @@ A DAG `pipeline_cripto` roda o fluxo completo na ordem, com retry:
 ## Por que cada escolha (o raciocínio)
 
 A regra que segui o tempo todo: a arquitetura vem do problema, não do hype. Antes de
-escolher qualquer ferramenta, olhei a natureza do dado — e cada decisão saiu daí.
+escolher qualquer ferramenta, olhei a natureza do dado e cada decisão saiu daí.
 
 **Batch, não streaming.** A cotação fecha uma vez por dia; não é um fluxo contínuo de
 eventos. Montar Kafka ou streaming aqui seria resolver um problema que eu não tenho.
-Fui de coleta agendada em Python. Saber quando *não* usar uma ferramenta também é
+Fui de coleta agendada em Python. Saber quando não usar uma ferramenta também é
 decisão de engenharia.
 
 **GCS como camada raw (bronze).** Guardo o dado exatamente como veio da API, em Parquet,
@@ -67,7 +67,7 @@ Ocupa menos, carrega mais rápido no BigQuery e evita adivinhação de tipos na 
 
 **BigQuery como warehouse.** Serverless, colunar, separa armazenamento de processamento
 e roda SQL analítico em escala. Modelei a tabela particionada por dia e clusterizada
-por moeda — não por enfeite: é o que faz uma query filtrada ler só a fatia necessária
+por moeda, não por enfeite: é o que faz uma query filtrada ler só a fatia necessária
 e gastar menos. Pensar em custo faz parte do trabalho.
 
 **dbt pra transformar (ELT, não ETL).** Em vez de transformar antes de carregar, eu
@@ -76,13 +76,13 @@ modelagem em camadas (staging → intermediate → marts), testes de qualidade e
 É a diferença entre "rodei uma query" e engenharia de software aplicada a dados.
 
 **Carga idempotente.** A carga reconstrói a tabela a partir de tudo que está no GCS
-(`WRITE_TRUNCATE`). Rodar duas vezes não duplica dado — o pipeline é seguro pra
+(`WRITE_TRUNCATE`). Rodar duas vezes não duplica dado, o pipeline é seguro pra
 re-executar, que é como tem que ser.
 
 **Airflow pra orquestrar.** Rodar os passos na mão funciona uma vez. Num pipeline de
 verdade eu preciso de ordem garantida, agendamento, retry automático e uma tela pra ver
-o que rodou e o que falhou. Vale separar: o Docker sobe o *ambiente*; o Airflow rege
-*quando e em que ordem* as tarefas rodam. São camadas diferentes de orquestração.
+o que rodou e o que falhou. Vale separar: o Docker sobe o ambiente; o Airflow rege
+quando e em que ordem as tarefas rodam. São camadas diferentes de orquestração.
 
 **Docker pra reproduzir.** Roda igual na minha máquina, no CI e onde for. Acaba com o
 clássico "na minha máquina funciona".
