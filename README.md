@@ -12,6 +12,14 @@ Fluxo resumido: CoinGecko -> Python (ingestao) -> GCS (raw) -> BigQuery
 (staging -> intermediate -> marts via dbt) -> Looker Studio. Airflow orquestra
 e Docker isola o ambiente.
 
+## Dashboard
+
+Dashboard final no Looker Studio, conectado nas tabelas analiticas do dbt.
+Cotacao das 4 principais criptos no ultimo ano (escala logaritmica para comparar
+ativos de precos bem diferentes).
+
+![Dashboard de criptomoedas](docs/dashboard.png)
+
 ## Stack e o porquê de cada escolha
 
 - **BigQuery** como warehouse: serverless, colunar e o free tier (1 TB/mes de query)
