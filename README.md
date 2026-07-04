@@ -19,8 +19,8 @@ entregar pronto pra análise, tudo automatizado e reproduzível.
 Usei criptomoedas porque é um assunto que curto e que gera dado de verdade: série
 temporal, preços que variam e métricas de negócio (retorno diário, volatilidade)
 que rendem transformação. Mas o ponto do projeto não é "saber cripto" nem "usar a
-ferramenta X" — é mostrar que eu entendo **por que** cada camada de um pipeline
-existe e **quando** cada tecnologia faz sentido.
+ferramenta X" é mostrar que eu entendo por que cada camada de um pipeline
+existe e quando cada tecnologia faz sentido.
 
 ## Arquitetura
 
@@ -93,17 +93,26 @@ existe um arquivo de segredo pra vazar.
 
 **Sem Terraform, de propósito.** Pra um projeto de escopo único, criar bucket e datasets
 pelo `gcloud`/`bq` (ver `infra/setup.sh`) resolve. Terraform brilha com múltiplos
-ambientes e gestão de estado — aqui seria complexidade sem retorno.
+ambientes e gestão de estado, aqui seria complexidade sem retorno.
 
 ## Estrutura
 
 ```
-ingestion/      extracao CoinGecko (main + backfill) e carga no BigQuery
-dbt/            modelos (staging -> intermediate -> marts) e testes
-orchestration/  dag do airflow
-infra/          setup do gcp (bucket + datasets)
-docs/           diagramas e prints
-.github/        ci (github actions)
+pipeline-cripto/
+├── ingestion/
+│   ├── main.py              # snapshot atual do CoinGecko -> GCS
+│   ├── backfill.py          # 1 ano de historico -> GCS
+│   ├── load_to_bq.py        # GCS -> BigQuery
+│   ├── sources/             # chamadas na API do CoinGecko
+│   └── utils/               # config e helpers do GCS
+├── dbt/models/
+│   ├── staging/             # limpeza e tipagem
+│   ├── intermediate/        # retorno diario (window function LAG)
+│   └── marts/               # precos diarios + volatilidade
+├── orchestration/dags/      # a DAG do Airflow
+├── infra/setup.sh           # cria bucket + datasets no GCP
+├── docs/                    # diagramas e prints
+└── docker-compose.yml
 ```
 
 ## Como rodar
@@ -139,9 +148,9 @@ docker compose up airflow --build   # http://localhost:8080, disparar a DAG
 O pipeline está completo e rodando de ponta a ponta. O que eu faria pra evoluir
 rumo a produção:
 
-- **Airflow num servidor / VPS** rodando 24/7, em vez de local — execução
+- **Airflow num servidor / VPS** rodando 24/7, em vez de local, execução
   independente da minha máquina.
 - **CI rodando `dbt test`** contra um dataset de teste a cada push (hoje o CI só
   faz o lint da ingestão).
 - **Alertas de falha** na DAG (e-mail/Slack) e testes de frescor do dado.
-- **Novas fontes e moedas** — o mesmo padrão de ingestão escala pra outras APIs.
+- **Novas fontes e moedas** o mesmo padrão de ingestão escala pra outras APIs.
