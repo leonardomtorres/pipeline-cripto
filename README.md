@@ -93,7 +93,7 @@ existe um arquivo de segredo pra vazar.
 
 **Sem Terraform, de propósito.** Pra um projeto de escopo único, criar bucket e datasets
 pelo `gcloud`/`bq` (ver `infra/setup.sh`) resolve. Terraform brilha com múltiplos
-ambientes e gestão de estado — aqui seria complexidade sem retorno.
+ambientes e gestão de estado, aqui seria complexidade sem retorno.
 
 ## Estrutura
 
