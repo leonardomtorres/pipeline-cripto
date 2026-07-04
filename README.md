@@ -134,11 +134,14 @@ cp ~/.config/gcloud/application_default_credentials.json credentials/adc.json
 docker compose up airflow --build   # http://localhost:8080, disparar a DAG
 ```
 
-## Status
+## Próximos passos
 
-- [x] Fase 0 - estrutura, docker, config
-- [x] Fase 1 - ingestao CoinGecko -> GCS
-- [x] Fase 2 - carga GCS -> BigQuery
-- [x] Fase 3 - modelos dbt + testes
-- [x] Fase 4 - airflow
-- [x] Fase 5 - dashboard
+O pipeline está completo e rodando de ponta a ponta. O que eu faria pra evoluir
+rumo a produção:
+
+- **Airflow num servidor / VPS** rodando 24/7, em vez de local — execução
+  independente da minha máquina.
+- **CI rodando `dbt test`** contra um dataset de teste a cada push (hoje o CI só
+  faz o lint da ingestão).
+- **Alertas de falha** na DAG (e-mail/Slack) e testes de frescor do dado.
+- **Novas fontes e moedas** — o mesmo padrão de ingestão escala pra outras APIs.
