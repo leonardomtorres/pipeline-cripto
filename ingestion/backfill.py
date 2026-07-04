@@ -60,8 +60,9 @@ def main():
     df = pd.concat(frames, ignore_index=True)
     df["vs_currency"] = config.COINGECKO_VS_CURRENCY
 
-    now = datetime.now(timezone.utc)
-    blob_path = f"coingecko/price_history/backfill_{now:%Y%m%dT%H%M%S}.parquet"
+    # nome FIXO de proposito: cada execucao sobrescreve o mesmo arquivo,
+    # entao rodar o backfill varias vezes nunca duplica o historico (idempotente)
+    blob_path = "coingecko/price_history/backfill.parquet"
     uri = upload_parquet(df, config.GCS_BUCKET, blob_path)
 
     logger.info("ok: %d linhas -> %s", len(df), uri)
