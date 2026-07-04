@@ -19,8 +19,8 @@ entregar pronto pra análise, tudo automatizado e reproduzível.
 Usei criptomoedas porque é um assunto que curto e que gera dado de verdade: série
 temporal, preços que variam e métricas de negócio (retorno diário, volatilidade)
 que rendem transformação. Mas o ponto do projeto não é "saber cripto" nem "usar a
-ferramenta X" — é mostrar que eu entendo **por que** cada camada de um pipeline
-existe e **quando** cada tecnologia faz sentido.
+ferramenta X" é mostrar que eu entendo por que cada camada de um pipeline
+existe e quando cada tecnologia faz sentido.
 
 ## Arquitetura
 
