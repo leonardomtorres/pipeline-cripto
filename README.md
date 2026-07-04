@@ -20,6 +20,14 @@ ativos de precos bem diferentes).
 
 ![Dashboard de criptomoedas](docs/dashboard.png)
 
+## Orquestracao (Airflow)
+
+A DAG `pipeline_cripto` roda o fluxo completo na ordem, com retry:
+`extrair_coingecko -> carregar_bigquery -> dbt_run -> dbt_test`. Sobe local via
+`docker compose up airflow` (standalone).
+
+![DAG do Airflow](docs/airflow_dag.png)
+
 ## Stack e o porquê de cada escolha
 
 - **BigQuery** como warehouse: serverless, colunar e o free tier (1 TB/mes de query)
@@ -61,8 +69,8 @@ docker compose run --rm dbt test
 ## Status
 
 - [x] Fase 0 - estrutura, docker, config
-- [ ] Fase 1 - ingestao CoinGecko -> GCS
-- [ ] Fase 2 - carga GCS -> BigQuery
-- [ ] Fase 3 - modelos dbt + testes
-- [ ] Fase 4 - airflow
-- [ ] Fase 5 - dashboard + ci
+- [x] Fase 1 - ingestao CoinGecko -> GCS
+- [x] Fase 2 - carga GCS -> BigQuery
+- [x] Fase 3 - modelos dbt + testes
+- [x] Fase 4 - airflow
+- [x] Fase 5 - dashboard

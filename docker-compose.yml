@@ -1,6 +1,9 @@
-# docker compose run --rm ingestion   -> roda a ingestao
-# docker compose run --rm dbt run      -> roda os modelos
-# docker compose run --rm dbt test     -> roda os testes
+# Airflow (orquestrador):
+#   docker compose up airflow --build     -> sobe em http://localhost:8080
+#
+# Rodar etapas isoladas (sem Airflow):
+#   docker compose run --rm ingestion     -> so a ingestao
+#   docker compose run --rm dbt run        -> so os modelos dbt
 
 services:
   ingestion:
@@ -9,7 +12,7 @@ services:
     volumes:
       - ./credentials:/app/credentials:ro
     environment:
-      GOOGLE_APPLICATION_CREDENTIALS: /app/credentials/gcp-key.json
+      GOOGLE_APPLICATION_CREDENTIALS: /app/credentials/adc.json
 
   dbt:
     build: ./dbt
@@ -19,7 +22,24 @@ services:
       - ./dbt:/dbt
       - ./credentials:/dbt/credentials:ro
     environment:
-      GOOGLE_APPLICATION_CREDENTIALS: /dbt/credentials/gcp-key.json
+      GOOGLE_APPLICATION_CREDENTIALS: /dbt/credentials/adc.json
       DBT_PROFILES_DIR: /dbt
     entrypoint: ["dbt"]
     command: ["--version"]
+
+  airflow:
+    build:
+      context: .
+      dockerfile: orchestration/Dockerfile
+    env_file: .env
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/gcp/adc.json
+    volumes:
+      - ./orchestration/dags:/opt/airflow/dags
+      - ./ingestion:/opt/airflow/ingestion
+      - ./dbt:/opt/airflow/dbt
+      - ./credentials/adc.json:/opt/airflow/gcp/adc.json:ro
+    ports:
+      - "8080:8080"
+    command: standalone
